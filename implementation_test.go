@@ -8,35 +8,17 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type TestCase struct {
-	name     string
-	input    string
-	expected string
-}
-
-func TestCalculatePostfix_SimpleCases(t *testing.T) {
-	tests := []TestCase{
+func TestCalculatePostfix_NormalCases(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
 		{"Addition", "1 2 +", "3"},
 		{"Multiplication", "3 6 *", "18"},
 		{"Subtraction", "5 3 -", "2"},
 		{"Division", "-8 2 /", "-4"},
 		{"Power", "4 3 ^", "64"},
-	}
-
-	for _, test := range tests {
-		// capturing the loop variable
-		test := test
-		t.Run(test.name, func(t *testing.T) {
-			t.Parallel()
-			res, err := CalculatePostfix(test.input)
-			require.NoError(t, err, "Unexpected error for input string %q", test.input)
-			assert.Equal(t, test.expected, res, "Invalid result for input string %q", test.input)
-		})
-	}
-}
-
-func TestCalculatePostfix_ComplexCases(t *testing.T) {
-	tests := []TestCase{
 		// (1 + 2) * (3 - 4) / 5
 		{"Medium", "1 2 + 3 4 - * 5 /", "-0.6"},
 		// 42 / 6 + (70 - 64) * (2 ^ 2) + 52 / 26 - 70 / 5
@@ -46,6 +28,7 @@ func TestCalculatePostfix_ComplexCases(t *testing.T) {
 	}
 
 	for _, test := range tests {
+		// capturing the loop variable
 		test := test
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
