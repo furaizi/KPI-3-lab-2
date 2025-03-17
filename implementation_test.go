@@ -65,6 +65,7 @@ func TestCalculatePostfix_ExceptionalCases(t *testing.T) {
 		{"EmptyString", "", emptyStringErrorMessage},
 		{"NotEnoughOperands", "9 -", incorrectNumberOfOperandsErrorMessage},
 		{"TooManyOperands", "5 1 2 *", incorrectNumberOfOperandsErrorMessage},
+		{"NotAnExpression", "abc", unsupportedSymbolErrorMessage},
 		{"UnknownOperator", "9 2 &", unsupportedSymbolErrorMessage},
 		{"UnknownOperand", "9 b +", unsupportedSymbolErrorMessage},
 	}
