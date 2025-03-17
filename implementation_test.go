@@ -38,6 +38,27 @@ func TestCalculatePostfix_Power(t *testing.T) {
 	assert.Equal(t, "64", res)
 }
 
+func TestCalculatePostfix_Medium(t *testing.T) {
+	// (1 + 2) * (3 - 4) / 5
+	res, err := CalculatePostfix("1 2 + 3 4 - * 5 /")
+	require.Nil(t, err)
+	assert.Equal(t, "-0.6", res)
+}
+
+func TestCalculatePostfix_Hard(t *testing.T) {
+	// 42 / 6 + (70 - 64) * (2 ^ 2) + 52 / 26 - 70 / 5
+	res, err := CalculatePostfix("42 6 / 70 64 - 2 2 ^ * + 52 25 / + 70 5 / -")
+	require.Nil(t, err)
+	assert.Equal(t, "19", res)
+}
+
+func TestCalculatePostfix_Complex(t *testing.T) {
+	// 5 + (6 * (2 ^ 3 - 4)) / (3 - 1)
+	res, err := CalculatePostfix("5 6 2 3 ^ 4 - * 3 1 - / +")
+	require.Nil(t, err)
+	assert.Equal(t, "17", res)
+}
+
 func ExampleCalculatePostfix() {
 	res, _ := CalculatePostfix("+ 2 2")
 	fmt.Println(res)
