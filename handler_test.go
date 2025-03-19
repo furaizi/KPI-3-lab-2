@@ -16,7 +16,7 @@ func TestCompute_ValidInput(t *testing.T) {
 	err := handler.Compute()
 
 	require.NoError(t, err)
-	assert.Equal(t, "4", output.String())
+	assert.Equal(t, "4\n", output.String())
 }
 
 func TestCompute_InvalidInput(t *testing.T) {
