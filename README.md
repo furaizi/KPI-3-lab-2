@@ -22,3 +22,5 @@ go run cmd/example/main.go -e "1 2 +"
   **Неуспішна збірка**:[`<Посилання на неуспішну збірку>`](https://github.com/furaizi/KPI-3-lab-2/actions/runs/13952289701).
   
   **Успішна збірка**:[`<Посилання на успішну збірку>`](https://github.com/furaizi/KPI-3-lab-2/actions/runs/13952335202).
+
+  PR demonstration (+)
