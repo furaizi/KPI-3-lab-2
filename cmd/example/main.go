@@ -3,26 +3,80 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
+	"os"
+	"strings"
 
 	lab2 "github.com/roman-mazur/architecture-lab-2"
 )
 
 var (
-	inputExpression = flag.String("e", "", "Expression to compute")
-	// TODO: Add other flags support for input and output configuration.
+  inputExpr  = flag.String("e", "", "Expression to evaluate (postfix notation)")
+  inputFile  = flag.String("f", "", "Input file with expression")
+  outputFile = flag.String("o", "", "Output file for results")
 )
 
 func main() {
-	flag.Parse()
+  flag.Parse()
 
-	// TODO: Change this to accept input from the command line arguments as described in the task and
-	//       output the results using the ComputeHandler instance.
-	//       handler := &lab2.ComputeHandler{
-	//           Input: {construct io.Reader according the command line parameters},
-	//           Output: {construct io.Writer according the command line parameters},
-	//       }
-	//       err := handler.Compute()
+  if err := validateFlags(); err != nil {
+    fmt.Fprintln(os.Stderr, "Error:", err)
+    os.Exit(1)
+  }
 
-	res, _ := lab2.CalculatePostfix("+ 2 2")
-	fmt.Println(res)
+  input, err := createInputReader()
+  if err != nil {
+    fmt.Fprintln(os.Stderr, "Error:", err)
+    os.Exit(1)
+  }
+
+  output, err := createOutputWriter()
+  if err != nil {
+    fmt.Fprintln(os.Stderr, "Error:", err)
+    os.Exit(1)
+  }
+
+  handler := &lab2.ComputeHandler{
+    Input:  input,
+    Output: output,
+  }
+
+  if err := handler.Compute(); err != nil {
+    fmt.Fprintln(os.Stderr, "Computation error:", err)
+    os.Exit(1)
+  }
+}
+
+func validateFlags() error {
+  if *inputExpr != "" && *inputFile != "" {
+    return fmt.Errorf("cannot use both -e and -f")
+  }
+  if *inputExpr == "" && *inputFile == "" {
+    return fmt.Errorf("must provide -e or -f")
+  }
+  return nil
+}
+
+func createInputReader() (io.Reader, error) {
+  if *inputExpr != "" {
+    return strings.NewReader(*inputExpr), nil
+  }
+
+  file, err := os.Open(*inputFile)
+  if err != nil {
+    return nil, fmt.Errorf("opening input file: %v", err)
+  }
+  return file, nil
+}
+
+func createOutputWriter() (io.Writer, error) {
+  if *outputFile == "" {
+    return os.Stdout, nil
+  }
+
+  file, err := os.Create(*outputFile)
+  if err != nil {
+    return nil, fmt.Errorf("creating output file: %v", err)
+  }
+  return file, nil
 }
