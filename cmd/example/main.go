@@ -30,10 +30,26 @@ func main() {
     os.Exit(1)
   }
 
+  if c, ok := input.(io.Closer); ok {
+     defer func() {
+         if err := c.Close(); err != nil {
+             fmt.Fprintln(os.Stderr, "error closing input file:", err)
+         }
+     }()
+  }
+
   output, err := createOutputWriter()
   if err != nil {
     fmt.Fprintln(os.Stderr, "Error:", err)
     os.Exit(1)
+  }
+
+  if c, ok := output.(io.Closer); ok {
+    defer func() {
+      if err := c.Close(); err != nil {
+        fmt.Fprintln(os.Stderr, "error closing output file")
+      }
+    }()
   }
 
   handler := &lab2.ComputeHandler{
